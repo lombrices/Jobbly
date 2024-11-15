@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, Text, Boolean, Real
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, Text, Boolean, REAL
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -17,14 +17,14 @@ class User(Base):
     digit_number_rut = Column(String(1), nullable=False)
     rut_numbers = Column(Integer, nullable=False)
     age = Column(Integer, nullable=False)
-    calification = Column(Real, nullable=False)
+    calification = Column(REAL, nullable=False)
 
-    # Define relaciones
-    logins = relationship("UserLogin", back_populates="user")
-    worker = relationship("Worker", back_populates="user", uselist=False)
-    petitioner = relationship("Petitioner", back_populates="user", uselist=False)
+    # # Define relaciones
+    # logins = relationship("UserLogin", back_populates="user")
+    # worker = relationship("Worker", back_populates="user", uselist=False)
+    # petitioner = relationship("Petitioner", back_populates="user", uselist=False)
 
-
+'''
 class UserLogin(Base):
     __tablename__ = "user_login"
 
@@ -88,7 +88,7 @@ class PetitionerService(Base):
     evaluation_petitioner = relationship("EvaluationPetitioner", back_populates="petitioner_service", uselist=False)
     evaluation_worker = relationship("EvaluationWorker", back_populates="petitioner_service", uselist=False)
 
-
+```
 class EvaluationPetitioner(Base):
     __tablename__ = "evaluation_petitioner"
 
@@ -164,3 +164,4 @@ class WorkerReview(Base):
 
     # Definir relaciones
     worker_request = relationship("WorkerRequest", back_populates="worker_review")
+'''

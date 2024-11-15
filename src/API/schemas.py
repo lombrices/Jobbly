@@ -14,6 +14,7 @@ class UserBase(BaseModel):
     age: int
     calification: float
 
+
 class UserCreate(UserBase):
     pass
 
@@ -21,7 +22,8 @@ class User(UserBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
 
 class UserLoginBase(BaseModel):
     main: EmailStr
@@ -36,6 +38,8 @@ class UserLogin(UserLoginBase):
 
     class Config:
         orm_mode = True
+
+''''
 
 class WorkerBase(BaseModel):
     id_user: int
@@ -179,3 +183,5 @@ class WorkerReview(WorkerReviewBase):
 
     class Config:
         orm_mode = True
+
+''' 

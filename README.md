@@ -1,16 +1,60 @@
 # Introducción 👋
 
-Este proyecto se creó con [React Native](https://reactnative.dev/docs/environment-setup) con el siguiente comando:
+...
+
+## Backend
+
+...
+
+### API
+
+Para la API se utilizó [fastAPI](https://fastapi.tiangolo.com).
+
+#### Requisitos:
+
+1. Instalar [Python](https://www.python.org/downloads/) para poder ejecutar los comandos de pip.
+2. Entorno virtual:
+
+   - Crear un entorno virtual:
+      ```bash
+      python -m venv env
+      ```
+   - Activar el entorno virtual:
+
+      En Windows:
+
+      ```bash
+      .\env\Scripts\activate
+      ```
+      
+      En Linux/Mac:
+      ```bash
+      source env/bin/activate
+      ```
+   - Instalar las dependencias:
+      ```bash
+      pip install -r requirements.txt
+      ```
+3. Iniciar la API:
+
+      ```bash
+      uvicorn app.main:app --reload
+      ```
+
+
+## App Móvil
+
+La aplicación movil se creó con [React Native](https://reactnative.dev/docs/environment-setup) con el siguiente comando:
 ```
 npx create-expo-app@latest
 ```
 
-## Pre-requisitos:
+### Pre-requisitos:
 1. Instalar [Node.js](https://nodejs.org/en)  para poder ejecutar los comandos de npm.
 2. Instalar [Android Studio](https://developer.android.com/studio) para poder emular la aplicación en un dispositivo virtual.
 
 
-## Comenzando
+### Comenzando
 
 1. Instalar dependencias
 
@@ -18,7 +62,7 @@ npx create-expo-app@latest
    npm install
    ```
 
-2. Start the app
+2. Iniciar la aplicación
 
    ```bash
     npx expo start

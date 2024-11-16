@@ -13,7 +13,7 @@ Para la API se utilizó [fastAPI](https://fastapi.tiangolo.com).
 #### Requisitos:
 
 1. Instalar [Python](https://www.python.org/downloads/) para poder ejecutar los comandos de pip.
-2. Entorno virtual:
+2. Entorno virtual y dependencias:
 
    - Crear un entorno virtual:
       ```bash
@@ -24,21 +24,21 @@ Para la API se utilizó [fastAPI](https://fastapi.tiangolo.com).
       En Windows:
 
       ```bash
-      .\env\Scripts\activate
+      .\venv\Scripts\activate
       ```
       
       En Linux/Mac:
       ```bash
-      source env/bin/activate
+      . venv/bin/activate
       ```
    - Instalar las dependencias:
       ```bash
       pip install -r requirements.txt
       ```
-3. Iniciar la API:
+3. Iniciar la API desde la carpeta src:
 
       ```bash
-      uvicorn app.main:app --reload
+      uvicorn main:app --reload
       ```
 
 

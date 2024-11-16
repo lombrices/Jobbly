@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import request_router, users_router
+from .routers import request_router, users_router, services_router
 from . import database
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,6 +8,7 @@ app = FastAPI()
 # Configuración de los routers (asegúrate de tener los routers correctamente importados)
 app.include_router(request_router.router)
 app.include_router(users_router.router)
+app.include_router(services_router.router)
 
 # Event handlers para manejar el ciclo de vida de la app
 @app.on_event("startup")

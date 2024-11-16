@@ -24,11 +24,13 @@ async def get_users(
     result = await db.execute(query)
     return result.scalars().all()
 
+#Obtiene un usuario por id
 async def get_user_by_id(db: AsyncSession, user_id: int):
     result = await db.execute(select(models.User).filter(models.User.id == user_id))
     user = result.scalars().first()
     return user
 
+#Crear usuario
 async def create_user(db: AsyncSession, user: schemas.UserCreate):
     db_user = models.User(**user.dict())
     db.add(db_user)
@@ -36,6 +38,7 @@ async def create_user(db: AsyncSession, user: schemas.UserCreate):
     await db.refresh(db_user)
     return db_user
 
+#Verificar login
 async def get_user_login(db: AsyncSession, user_login_id: int):
     result = await db.execute(select(models.UserLogin).filter(models.UserLogin.id == user_login_id))
     return result.scalars().first()
@@ -48,34 +51,24 @@ async def create_user_login(db: AsyncSession, user_login: schemas.UserLoginCreat
     await db.refresh(db_user_login)
     return db_user_login
 
-################## ANTIGUO ORDENAR ############################
+ #Visualizar perfiles de usuario
+async def visualize_user_profile (db: AsyncSession, user_id: int):
+    result = await db.execute(select(models.User).filter(models.User.id == user_id))
+    return result.scalars().first()
 
-# async def create_request (db: AsyncSession, request: schemas.RequestCreate, id_petitioner: int):
-#     db_request = models.Request(**request.dict(), id_petitioner=id_petitioner)
-#     db.add(db_request)
-#     await db.commit()
-#     await db.refresh(db_request)
-#     return db_request
+#Editar perfil 
+async def edit_profile (db: AsyncSession, user_id: int, user: schemas.UserBase):
+    result = await db.execute(select(models.User).filter(models.User.id == user_id))
+    user_db = result.scalars().first()
+    user_db.lastname = user.lastname
+    user_db.phone_number = user.phone_number
 
-# #Visualizar historial de servicios solicitados
-# async def visualize_services(db: AsyncSession, user_id: int):
-#     result = await db.execute(select(models.Service).filter(models.Service.finish_date != None, models.Service.id_worker == user_id))
-#     return result
-    
-    
-# #Visualizar perfiles de usuario
-# async def visualize_user_profile (db: AsyncSession, user_id: int):
-#     result = await db.execute(select(models.User).filter(models.User.id == user_id))
-#     return result.scalars().first()
+#Cambiar contraseña
+async def change_password (db: AsyncSession, user_id: int, user: schemas.UserLogin):
+    result = await db.execute(select(models.UserLogin).filter(models.UserLogin.id_user == user_id))
+    user_db = result.scalars().first()
+    user_db.pass_hash = user.pass_hash
 
 
-# #Editar perfil 
-# async def edit_profile (db: AsyncSession, user_id: int, user: schemas.UserBase):
-#     result = await db.execute(select(models.User).filter(models.User.id == user_id))
-#     user_db = result.scalars().first()
-#     user_db.name = user.name
-#     user_db.last_name = user.last_name
-#     user_db.email = user.email
-#     user_db.phone = user.phone
-#     user_db.birthdate = user.birthdate
+
 

@@ -6,11 +6,9 @@ class UserBase(BaseModel):
     first_name: Optional[str]
     second_name: Optional[str]
     lastname: Optional[str]
-    mail: EmailStr
     phone_number: int
     address: Optional[str]
-    digit_number_rut: str
-    rut_numbers: int
+    rut: int
     age: int
     calification: float
 
@@ -24,9 +22,8 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
-
 class UserLoginBase(BaseModel):
-    main: EmailStr
+    mail: EmailStr
     pass_hash: str  # Para crear y recibir el hash en lugar de la contraseña directa
 
 class UserLoginCreate(UserLoginBase):
@@ -37,9 +34,7 @@ class UserLogin(UserLoginBase):
     id_user: int
 
     class Config:
-        orm_mode = True
-
-''''
+        from_attributes = True
 
 class WorkerBase(BaseModel):
     id_user: int
@@ -52,7 +47,8 @@ class Worker(WorkerBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
 
 class PetitionerBase(BaseModel):
     id_user: int
@@ -65,10 +61,12 @@ class Petitioner(PetitionerBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ServiceBase(BaseModel):
     id_worker: int
+    title: str
+    subtitle: str
     content: str
     init_date: date
     finish_date: Optional[date] = None
@@ -81,7 +79,7 @@ class Service(ServiceBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class PetitionerServiceBase(BaseModel):
     id_services: int
@@ -96,7 +94,8 @@ class PetitionerService(PetitionerServiceBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
 
 class EvaluationPetitionerBase(BaseModel):
     id_petitioner_services: int
@@ -110,7 +109,7 @@ class EvaluationPetitioner(EvaluationPetitionerBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class EvaluationWorkerBase(BaseModel):
     id_petitioner_services: int
@@ -124,22 +123,26 @@ class EvaluationWorker(EvaluationWorkerBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class RequestBase(BaseModel):
     id_petitioner: int
+    title: str
+    subtitle: str
+    content: str
     init_date: date
     finish_date: Optional[date] = None
     price: int
 
 class RequestCreate(RequestBase):
+
     pass
 
 class Request(RequestBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class WorkerRequestBase(BaseModel):
     id_worker: int
@@ -168,7 +171,7 @@ class PetitionerReview(PetitionerReviewBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class WorkerReviewBase(BaseModel):
     id_worker_request: int
@@ -182,6 +185,4 @@ class WorkerReview(WorkerReviewBase):
     id: int
 
     class Config:
-        orm_mode = True
-
-''' 
+        from_attributes = True

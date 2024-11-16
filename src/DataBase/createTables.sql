@@ -21,8 +21,8 @@ create table users (
 create table user_login (
     id serial primary key not null,
     mail varchar(30) unique not null,
-    pass varchar(30) unique not null,
-    id_user int not null,
+    pass_hash varchar(30) unique not null,
+    id_user int unique not null,
     foreign key (id_user) references users(id) on delete cascade
 );
 
@@ -41,7 +41,7 @@ create table petitioner (
 );
 
 -- Tabla que almacena todos los campos necesarios para almacenar un servicio
-create table services (
+create table service (
     id serial primary key not null,
     id_worker integer not null,
     foreign key (id_worker) references worker(id) on delete cascade,
@@ -54,10 +54,10 @@ create table services (
 );
 
 -- Peticion del solicitante para que el trabajador le de un servicio
-create table petitioner_services(
+create table petitioner_service(
     id serial primary key not null,
-    id_services integer not null,
-    foreign key (id_services) references services(id) on delete cascade,
+    id_service integer not null,
+    foreign key (id_service) references service(id) on delete cascade,
     id_petitioner integer not null,
     foreign key (id_petitioner) references petitioner(id) on delete cascade,
     petition_date date not null,
@@ -67,8 +67,8 @@ create table petitioner_services(
 -- Evaluacion de parte del solicitante a un servicio dado por un trabajador
 create table evaluation_petitioner( 
     id serial primary key not null,
-    id_petitioner_services integer unique not null,
-    foreign key (id_petitioner_services) references petitioner_services(id),
+    id_petitioner_service integer unique not null,
+    foreign key (id_petitioner_service) references petitioner_service(id),
     content text,
     calification integer not null
 );
@@ -76,8 +76,8 @@ create table evaluation_petitioner(
 -- Evaluacion de parte del solicitante a un servicio dado por un trabajador
 create table evaluation_worker( 
     id serial primary key not null,
-    id_petitioner_services integer unique not null,
-    foreign key (id_petitioner_services) references petitioner_services(id),
+    id_petitioner_service integer unique not null,
+    foreign key (id_petitioner_service) references petitioner_service(id),
     content text,
     calification int not null
 );

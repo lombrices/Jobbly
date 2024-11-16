@@ -17,9 +17,6 @@ def get_db():
 # Crea un usuario
 @router.post("/users/", response_model=schemas.UserCreate)
 async def create_user(user: schemas.UserCreate, db: AsyncSession = Depends(get_db)):
-    print ("en create_user")
-    print ("user: ", user)
-    
     user = await users_crud.create_user(db=db, user=user)
     return schemas.User.from_orm(user)
 
@@ -32,39 +29,43 @@ async def get_user_by_id(user_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return schemas.User.from_orm(user)
 
-# Verifica el login
-@router.post("/users/{id}", response_model=schemas.User)
-async def get_user_login (id: int, user: schemas.UserLogin, db: AsyncSession = Depends(get_db)):
-    user = await users_crud.get_user_login(db=db, id=id, user=user)
-    if user is None:
+
+"""
+Obtiene un usuario con filtros opcionales.
+    - **first_name_starts_with**: Filtra usuarios cuyo nombre comience con este valor.
+    - **lastname_starts_with**: Filtra usuarios cuyo apellido comience con este valor.
+    - **age_greater_than**: Filtra usuarios con edad mayor que este valor.
+"""
+@router.get("/users", response_model=List[schemas.User])
+async def get_users_with_filters(
+    first_name_starts_with: Optional[str] = None,
+    lastname_starts_with: Optional[str] = None,
+    age_greater_than: Optional[int] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    try:
+        users = await users_crud.get_users(
+            db=db,
+            first_name_starts_with=first_name_starts_with,
+            lastname_starts_with=lastname_starts_with,
+            age_greater_than=age_greater_than
+        )
+        if not users:
+            raise HTTPException(status_code=404, detail="No users found with the provided filters")
+        return [schemas.User.from_orm(user) for user in users]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {e}")
+
+# Verifica el login mediante user_login
+@router.get("/user_login/{mail}", response_model=schemas.User)
+async def get_user_login (mail: str, db: AsyncSession = Depends(get_db)):
+    user_login = await users_crud.get_user_login(db=db, mail=mail)
+    if user_login is None:
         raise HTTPException(status_code=404, detail="User not found")
-    return schemas.User.from_orm(user)
+    return schemas.UserLogin.from_orm(user_login)
 
-
-
-
-
-# # Obtiene usuarios con filtros
-# # Ejemplo de ruta: GET /users/?first_name_starts_with=O&age_greater_than=25
-# @router.get("/users/", response_model=List[schemas.User])
-# async def read_users(
-#     first_name_starts_with: Optional[str] = None,
-#     lastname_starts_with: Optional[str] = None,
-#     age_greater_than: Optional[int] = None,
-#     db: AsyncSession = Depends(get_db)
-# ):
-#     return await users_crud.get_users(
-#         db=db,
-#         first_name_starts_with=first_name_starts_with,
-#         lastname_starts_with=lastname_starts_with,
-#         age_greater_than=age_greater_than
-#     )
-
-
-
-# # Crea un login de usuario
-# @router.post("/user_logins/", response_model=schemas.UserLogin)
-# async def create_user_login(user_login: schemas.UserLoginCreate, db: AsyncSession = Depends(get_db)):
-#     # Aquí deberías obtener el id del usuario al cual pertenece el login
-#     user_id = 1  # Ejemplo, cambia según el flujo
-#     return await users_crud.create_user_login(db=db, user_login=user_login, user_id=user_id)
+# Crea un user_login
+@router.post("/user_login/", response_model=schemas.UserLoginCreate)
+async def post_user_login (user_login:schemas.UserLoginCreate, db:AsyncSession = Depends(get_db)):
+    user_login = await users_crud.create_user_login(db=db, user_login=user_login)
+    return schemas.UserLogin.from_orm(user_login)

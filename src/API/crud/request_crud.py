@@ -1,7 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from .. import models, schemas
+from .. import models, schemas, database
 from datetime import datetime
+
 
 # Crear solicitud
 async def create_request (db: AsyncSession, request: schemas.RequestCreate):
@@ -39,9 +40,13 @@ async def change_price_request(db: AsyncSession, id_request: int, price: float):
 # stand by
 
 # Obtener las solicitudes activas de un solicitante
-async def get_active_requests(db : AsyncSession, petitioner_id: int):
-    result = await db.execute(select(models.Request).filter(models.Request.id_petitioner == petitioner_id , models.Request.finish_date == None))
-    return result
+async def get_active_requests(db: AsyncSession, petitioner_id: int):
+    result = await db.execute(
+        select(models.Request).filter(models.Request.id_petitioner == petitioner_id, models.Request.finish_date == None)
+    )
+    # Devuelve una lista de instancias de Request en lugar de Row
+    return result.scalars().all()
+
 
 # Ver calificaion de un servicio especifico
 async def get_service_evaluation(db: AsyncSession, service_id:int):

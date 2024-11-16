@@ -25,20 +25,19 @@ class User(UserBase):
 class UserLoginBase(BaseModel):
     mail: EmailStr
     pass_hash: str  # Para crear y recibir el hash en lugar de la contraseña directa
+    id_user: int
 
 class UserLoginCreate(UserLoginBase):
     pass
 
 class UserLogin(UserLoginBase):
     id: int
-    id_user: int
 
     class Config:
         from_attributes = True
 
 class WorkerBase(BaseModel):
     id_user: int
-    # Otros campos adicionales para el trabajador
 
 class WorkerCreate(WorkerBase):
     pass
@@ -52,7 +51,6 @@ class Worker(WorkerBase):
 
 class PetitionerBase(BaseModel):
     id_user: int
-    # Otros campos adicionales para el solicitante
 
 class PetitionerCreate(PetitionerBase):
     pass

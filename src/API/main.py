@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import request_router, users_router, services_router, worker_router, petitioner_router
+from .routers import request_router, users_router, services_router, worker_router, petitioner_router, petitioner_service_router, worker_request_router
 from . import database
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -10,7 +10,10 @@ app.include_router(request_router.router)
 app.include_router(users_router.router)
 app.include_router(services_router.router)
 app.include_router(worker_router.router)
+app.include_router(worker_request_router.router)
 app.include_router(petitioner_router.router)
+app.include_router(petitioner_service_router.router)
+
 
 
 # Event handlers para manejar el ciclo de vida de la app

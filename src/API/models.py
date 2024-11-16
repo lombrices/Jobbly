@@ -28,7 +28,7 @@ class UserLogin(Base):
     id = Column(Integer, primary_key=True, index=True)
     mail = Column(String(30), unique=True, nullable=False)
     pass_hash = Column(String(128), unique=True, nullable=False)  # Recomendación: almacenar contraseñas cifradas
-    id_user = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
+    id_user = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True)
 
     user = relationship("User", back_populates="logins")
 

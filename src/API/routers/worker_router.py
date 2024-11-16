@@ -15,6 +15,11 @@ def get_db():
         db.close()
 
 # Crear un trabajador
-@router.post("/worker", response_model=schemas.Worker)
+@router.post("/worker/", response_model=schemas.Worker)
 async def create_worker(worker: schemas.WorkerCreate, db: AsyncSession = Depends(get_db)):
     return await worker_crud.create_worker(db, worker)
+
+# # Obtiene datos del usuario mediante el id del trabajador
+# @router.get("/worker/{id_worker}", response_model=schemas.User)
+# async def get_worker_user(id_worker : int, db : AsyncSession = Depends(get_db)):
+# 

@@ -17,7 +17,7 @@ Para la API se utilizó [fastAPI](https://fastapi.tiangolo.com).
 
    - Crear un entorno virtual:
       ```bash
-      python -m venv env
+      python -m venv venv
       ```
    - Activar el entorno virtual:
 

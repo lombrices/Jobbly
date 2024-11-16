@@ -38,7 +38,7 @@ Para la API se utilizó [fastAPI](https://fastapi.tiangolo.com).
 3. Iniciar la API desde la carpeta src:
 
       ```bash
-      uvicorn main:app --reload
+      uvicorn API.main:app --reload
       ```
 
 

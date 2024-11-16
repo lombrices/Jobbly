@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import request_router, users_router, services_router
+from .routers import request_router, users_router, services_router, worker_router, petitioner_router
 from . import database
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,6 +9,9 @@ app = FastAPI()
 app.include_router(request_router.router)
 app.include_router(users_router.router)
 app.include_router(services_router.router)
+app.include_router(worker_router.router)
+app.include_router(petitioner_router.router)
+
 
 # Event handlers para manejar el ciclo de vida de la app
 @app.on_event("startup")
@@ -20,10 +23,3 @@ async def startup():
 async def shutdown():
     # Aquí puedes agregar cualquier tarea de limpieza al apagar el servidor
     pass
-
-# # Utilizar la sesión de base de datos en las rutas
-# @app.get("/", response_model=None)
-# async def get_data(db: AsyncSession = database.get_db()):
-#     # Aquí puedes usar la sesión de la base de datos para realizar consultas
-#     result = await db.execute("SELECT * FROM users")
-#     return {"data": result.fetchall()}

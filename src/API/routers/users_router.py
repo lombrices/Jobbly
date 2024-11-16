@@ -1,3 +1,4 @@
+from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
@@ -26,9 +27,7 @@ async def create_user(user: schemas.UserCreate, db: AsyncSession = Depends(get_d
 # Obtiene un usuario por id
 @router.get("/users/{user_id}", response_model=schemas.User)
 async def get_user_by_id(user_id: int, db: AsyncSession = Depends(get_db)):
-    print("user_id: ", user_id)
     user = await users_crud.get_user_by_id(db=db, user_id=user_id)
-    print("user: ", user)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return schemas.User.from_orm(user)
@@ -40,6 +39,10 @@ async def get_user_login (id: int, user: schemas.UserLogin, db: AsyncSession = D
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return schemas.User.from_orm(user)
+
+
+
+
 
 # # Obtiene usuarios con filtros
 # # Ejemplo de ruta: GET /users/?first_name_starts_with=O&age_greater_than=25

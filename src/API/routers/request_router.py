@@ -19,15 +19,13 @@ async def create_request(request: schemas.RequestCreate, db: AsyncSession = Depe
     result = await crud.create_request(db=db, request=request) 
     return schemas.Request.from_orm(result)
 
-
-
-# Devuleve un request por id
+# Obtiene un request por id
 @router.get("/request/{id_request}", response_model=schemas.Request)
-async def get_request(request: schemas.Request, db: AsyncSession = Depends(get_db)):
-    request = await crud.get_request_by_id(db=db)
-    if request is None:
+async def get_request_by_id(id_request: int, db: AsyncSession = Depends(get_db)):
+    response = await crud.get_request_by_id(db=db, id_request=id_request)
+    if response is None:
         raise HTTPException(status_code=404, detail="Request not found")
-    return schemas.Request.from_orm(request)
+    return schemas.Request.from_orm(response)
 
 # Finaliza una solicitud
 @router.put("/request/{id_request}/finish", response_model=schemas.Request)

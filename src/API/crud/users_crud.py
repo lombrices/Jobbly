@@ -71,11 +71,18 @@ async def change_password (db: AsyncSession, user_id: int, user: schemas.UserLog
 
 # Create user login
 async def create_user_login(db: AsyncSession, user_login: schemas.UserLoginCreate):
+    
+    # Verificamos si el ID existe
+    db_user_login = await db.execute(select(models.User).filter(models.User.id == user_login.id_user))
+    db_user_login = db_user_login.scalars().first()
+    if db_user_login == None:
+        raise HTTPException(status_code=404, detail="The user ID does not exists")
+    
     # Verificamos que el mail no exista
     db_user_login = await db.execute(select(models.UserLogin).filter(models.UserLogin.mail == user_login.mail))
     db_user_login = db_user_login.scalars().first()
-    if db_user_login:
-      raise HTTPException(status_code=404, detail="The mail already exists")
+    if db_user_login != None:
+        raise HTTPException(status_code=404, detail="The mail already exists")
 
     db_user_login = models.UserLogin(**user_login.dict())
     db.add(db_user_login)

@@ -67,4 +67,4 @@ async def get_requests(
     )
     if not requests:
         raise HTTPException(status_code=404, detail="No requests found")
-    return requests
+    return schemas.EvaluationPetitioner.form_orm(requests)

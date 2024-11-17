@@ -25,4 +25,4 @@ async def get_worker_user(id_worker : int, db : AsyncSession = Depends(get_db)):
     user = await worker_crud.get_user_by_worker_id(worker_id=id_worker, db=db)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    return user
+    return schemas.EvaluationPetitioner.form_orm(user)

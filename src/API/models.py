@@ -63,7 +63,7 @@ class Service(Base):
     subtitle = Column(String(100), nullable = False)
     content = Column(Text)
     init_date = Column(Date, nullable=False)
-    finish_date = Column(Date)
+    finish_date = Column(Date, nullable=True)
     price = Column(Integer, nullable=False)
 
     # Definir relaciones
@@ -74,7 +74,7 @@ class PetitionerService(Base):
     __tablename__ = "petitioner_service"
 
     id = Column(Integer, primary_key=True, index=True)
-    id_services = Column(Integer, ForeignKey("service.id", ondelete="CASCADE"))
+    id_service = Column(Integer, ForeignKey("service.id", ondelete="CASCADE"))
     id_petitioner = Column(Integer, ForeignKey("petitioner.id", ondelete="CASCADE"))
     petition_date = Column(Date, nullable=False)
     solved = Column(Boolean)
@@ -89,7 +89,7 @@ class EvaluationPetitioner(Base):
     __tablename__ = "evaluation_petitioner"
 
     id = Column(Integer, primary_key=True, index=True)
-    id_petitioner_services = Column(Integer, ForeignKey("petitioner_service.id"), unique=True, nullable=False)
+    id_petitioner_service = Column(Integer, ForeignKey("petitioner_service.id"), unique=True, nullable=False)
     content = Column(Text)
     calification = Column(Integer, nullable=False)
 
@@ -100,7 +100,7 @@ class EvaluationWorker(Base):
     __tablename__ = "evaluation_worker"
 
     id = Column(Integer, primary_key=True, index=True)
-    id_petitioner_services = Column(Integer, ForeignKey("petitioner_service.id"), unique=True, nullable=False)
+    id_petitioner_service = Column(Integer, ForeignKey("petitioner_service.id"), unique=True, nullable=False)
     content = Column(Text)
     calification = Column(Integer, nullable=False)
 
@@ -116,7 +116,7 @@ class Request(Base):
     subtitle = Column(String(100), nullable = False)
     content = Column(Text)
     init_date = Column(Date, nullable=False) 
-    finish_date = Column(Date)
+    finish_date = Column(Date, nullable=True)
     price = Column(Integer, nullable=False)
 
     # Definir relaciones

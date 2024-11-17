@@ -73,7 +73,7 @@ create table evaluation_petitioner(
     calification integer not null
 );
 
--- Evaluacion de parte del solicitante a un servicio dado por un trabajador
+-- Evaluacion de parte del trabajador al solicitante dado un servicio dado por un trabajador
 create table evaluation_worker( 
     id serial primary key not null,
     id_petitioner_service integer unique not null,

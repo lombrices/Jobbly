@@ -11,14 +11,7 @@ async def create_petitioner_service(
     db: AsyncSession,
     petitioner_service: schemas.PetitionerServiceCreate
 ):
-    # Crear una instancia del modelo PetitionerService
-    db_petitioner_service = models.PetitionerService(
-        id_services=petitioner_service.id_services,
-        id_petitioner=petitioner_service.id_petitioner,
-        petition_date=petitioner_service.petition_date,
-        solved=petitioner_service.solved
-    )
-
+    db_petitioner_service = models.PetitionerService(**petitioner_service.dict())
     # Añadir la instancia a la sesión de base de datos
     db.add(db_petitioner_service)
     # Confirmar los cambios en la base de datos
@@ -38,7 +31,7 @@ async def get_petitioner_service_by_worker_id(
     """
     query = (
         select(models.PetitionerService)
-        .join(models.Service, models.Service.id == models.PetitionerService.id_services)
+        .join(models.Service, models.Service.id == models.PetitionerService.id_service)
         .where(models.Service.id_worker == worker_id)
         .options(
             joinedload(models.PetitionerService.service),  # Carga el servicio relacionado
@@ -62,7 +55,7 @@ async def get_resolved_petitioner_service_by_worker_id(
     """
     query = (
         select(models.PetitionerService)
-        .join(models.Service, models.Service.id == models.PetitionerService.id_services)
+        .join(models.Service, models.Service.id == models.PetitionerService.id_service)
         .where(models.Service.id_worker == worker_id)
         .where(models.PetitionerService.solved == True)  # Filtra por los registros resueltos
         .options(
@@ -87,7 +80,7 @@ async def get_unresolved_petitioner_service_by_worker_id(
     """
     query = (
         select(models.PetitionerService)
-        .join(models.Service, models.Service.id == models.PetitionerService.id_services)
+        .join(models.Service, models.Service.id == models.PetitionerService.id_service)
         .where(models.Service.id_worker == worker_id)
         .where(models.PetitionerService.solved == False)  # Filtra por los registros no resueltos
         .options(

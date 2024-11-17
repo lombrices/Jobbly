@@ -29,9 +29,13 @@ async def get_petitioners_reviews_by_id_request(
 ) -> List[models.PetitionerReview]:
     query = (
         select(models.PetitionerReview)
-        .join(models.WorkerRequest, models.WorkerRequest.id == models.PetitionerReview.id_worker_request)
-        .join(models.Request, models.Request.id == models.WorkerRequest.id_request)
-        .filter(models.Request.id_worker == worker_id)
+        .join(models.WorkerRequest, models.WorkerRequest.id == models.PetitionerReview.id_worker_request and models.WorkerRequest.id_worker == worker_id)
     )
+    # query = (
+    #     select(models.PetitionerReview)
+    #     .join(models.WorkerRequest, models.WorkerRequest.id == models.PetitionerReview.id_worker_request)
+    #     .join(models.Request, models.Request.id == models.WorkerRequest.id_request)
+    #     .filter(models.Request.id_worker == worker_id)
+    # )
     result = await db.execute(query)
     return result.scalars().all()

@@ -73,4 +73,4 @@ async def get_services(
     )
     if not services:
         raise HTTPException(status_code=404, detail="No services found")
-    return services
+    return [schemas.Service.from_orm(service) for service in services]

@@ -1,4 +1,4 @@
-#!/Users/yoko/Library/CloudStorage/OneDrive-UniversidadAustraldeChile/universidad/semestre06_2024/arquitectura_software/Jobbly/src/API/venv/bin/python
+#!/home/nik/University/Info229/Jobbly/src/API/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

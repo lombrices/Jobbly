@@ -9,7 +9,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/Users/yoko/Library/CloudStorage/OneDrive-UniversidadAustraldeChile/universidad/semestre06_2024/arquitectura_software/Jobbly/src/API/venv"
+setenv VIRTUAL_ENV "/home/nik/University/Info229/Jobbly/src/API/venv"
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"

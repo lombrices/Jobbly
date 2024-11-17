@@ -80,7 +80,7 @@ class Service(ServiceBase):
         from_attributes = True
 
 class PetitionerServiceBase(BaseModel):
-    id_services: int
+    id_service: int
     id_petitioner: int
     petition_date: date
     solved: bool
@@ -96,7 +96,7 @@ class PetitionerService(PetitionerServiceBase):
 
 
 class EvaluationPetitionerBase(BaseModel):
-    id_petitioner_services: int
+    id_petitioner_service: int
     content: str
     calification: int
 
@@ -110,7 +110,7 @@ class EvaluationPetitioner(EvaluationPetitionerBase):
         from_attributes = True
 
 class EvaluationWorkerBase(BaseModel):
-    id_petitioner_services: int
+    id_petitioner_service: int
     content: str
     calification: int
 

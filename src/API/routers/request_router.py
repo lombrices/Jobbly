@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 from .. import schemas, database
 from ..crud import request_crud as crud
 
@@ -49,3 +49,22 @@ async def get_active_requests(id_petitioner: int, db: AsyncSession = Depends(get
     result = await crud.get_active_requests(db=db, petitioner_id=id_petitioner)
     return [schemas.Request.from_orm(request) for request in result]
 
+# Obtener requests con filtros
+@router.get("/requests", response_model=List[schemas.Request])
+async def get_requests(
+    title: Optional[str] = None,
+    min_price: Optional[int] = None,
+    max_price: Optional[int] = None,
+    petitioner_id: Optional[int] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    requests = await crud.get_requests(
+        db=db, 
+        title_contains=title, 
+        min_price=min_price, 
+        max_price=max_price, 
+        petitioner_id=petitioner_id
+    )
+    if not requests:
+        raise HTTPException(status_code=404, detail="No requests found")
+    return requests

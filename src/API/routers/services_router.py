@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 from .. import schemas, database
 from ..crud import services_crud as crud
 
@@ -55,3 +55,22 @@ async def get_active_services(id_worker: int, db: AsyncSession = Depends(get_db)
     result = await crud.get_active_services(db=db, worker_id=id_worker)
     return [schemas.Service.from_orm(service) for service in result]
 
+# Obtener servicios con filtros
+@router.get("/services", response_model=List[schemas.Service])
+async def get_services(
+    title: Optional[str] = None,
+    min_price: Optional[int] = None,
+    max_price: Optional[int] = None,
+    worker_id: Optional[int] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    services = await crud.get_services(
+        db=db, 
+        title_contains=title, 
+        min_price=min_price, 
+        max_price=max_price, 
+        worker_id=worker_id
+    )
+    if not services:
+        raise HTTPException(status_code=404, detail="No services found")
+    return services

@@ -29,6 +29,18 @@ async def create_worker(db: AsyncSession, worker: models.Worker):
 
     return db_worker
 
-# # Buscar un usuario dado el id de un trabajador
-# async def get_worker_user(db: AsyncSession, worker_id: int):
+# Obtiene datos del usuario mediante el id del trabajador
+async def get_user_by_worker_id(db: AsyncSession, worker_id: int):
+    """
+    Obtiene un usuario dado el ID de un trabajador.
     
+    :param db: Sesión de la base de datos.
+    :param worker_id: ID del trabajador.
+    :return: Usuario asociado al trabajador.
+    """
+    # Realiza la consulta para obtener el usuario asociado al worker_id
+    result = await db.execute(
+        select(models.User).join(models.Worker).filter(models.Worker.id == worker_id)
+    )
+    user = result.scalars().first()
+    return user

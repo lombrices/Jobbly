@@ -36,6 +36,7 @@ Obtiene un usuario con filtros opcionales.
     - **lastname_starts_with**: Filtra usuarios cuyo apellido comience con este valor.
     - **age_greater_than**: Filtra usuarios con edad mayor que este valor.
 """
+
 @router.get("/users", response_model=List[schemas.User])
 async def get_users_with_filters(
     first_name_starts_with: Optional[str] = None,
@@ -43,21 +44,23 @@ async def get_users_with_filters(
     age_greater_than: Optional[int] = None,
     db: AsyncSession = Depends(get_db)
 ):
-    try:
-        users = await users_crud.get_users(
-            db=db,
-            first_name_starts_with=first_name_starts_with,
-            lastname_starts_with=lastname_starts_with,
-            age_greater_than=age_greater_than
-        )
-        if not users:
-            raise HTTPException(status_code=404, detail="No users found with the provided filters")
-        return [schemas.User.from_orm(user) for user in users]
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"An error occurred: {e}")
+    # Llamar a la función en el CRUD
+    users = await users_crud.get_users(
+        db=db,
+        first_name_starts_with=first_name_starts_with,
+        lastname_starts_with=lastname_starts_with,
+        age_greater_than=age_greater_than
+    )
+    
+    # Verificar si se encontraron usuarios
+    if not users:
+        raise HTTPException(status_code=404, detail="No users found with the provided filters")
+    
+    # Retornar los usuarios mapeados a los esquemas
+    return [schemas.User.from_orm(user) for user in users]
 
 # Verifica el login mediante user_login
-@router.get("/user_login/{mail}", response_model=schemas.User)
+@router.get("/user_login/{mail}", response_model=schemas.UserLogin)
 async def get_user_login (mail: str, db: AsyncSession = Depends(get_db)):
     user_login = await users_crud.get_user_login(db=db, mail=mail)
     if user_login is None:

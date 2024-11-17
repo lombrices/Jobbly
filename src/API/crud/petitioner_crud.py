@@ -29,3 +29,19 @@ async def create_petitioner(db: AsyncSession, petitioner: models.Petitioner):
     await db.refresh(db_petitioner) 
 
     return db_petitioner
+
+# Obtiene datos del usuario mediante el id del trabajador
+async def get_user_by_petitioner_id(db: AsyncSession, petitioner_id: int):
+    """
+    Obtiene un usuario dado el ID de un solicitante.
+    
+    :param db: Sesión de la base de datos.
+    :param petitioner_id: ID del solicitante.
+    :return: Usuario asociado al solicitante.
+    """
+    # Realiza la consulta para obtener el usuario asociado al petitioner_id
+    result = await db.execute(
+        select(models.User).join(models.Petitioner).filter(models.Petitioner.id == petitioner_id)
+    )
+    user = result.scalars().first()
+    return user

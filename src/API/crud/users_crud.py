@@ -4,7 +4,8 @@ from fastapi import HTTPException
 from .. import models, schemas
 from typing import Optional, List
 
-## Funcion get_users que permite filtros
+# Obtiene todos los usuarios con filtros opcionales
+
 async def get_users(
     db: AsyncSession,
     first_name_starts_with: Optional[str] = None,
@@ -21,9 +22,20 @@ async def get_users(
     
     if age_greater_than:
         query = query.filter(models.User.age > age_greater_than)
+
+    try:
+        result = await db.execute(query)
+        users = result.scalars().all()
+        
+        if not users:
+            raise HTTPException(status_code=404, detail="No users found matching the criteria")
+        
+        return users
     
-    result = await db.execute(query)
-    return result.scalars().all()
+    except Exception as e:
+        # Captura errores generales con detalles adicionales
+        raise HTTPException(status_code=500, detail=f"Error occurred while fetching users: {str(e)}")
+
 
 # Obtiene un usuario por id
 async def get_user_by_id(db: AsyncSession, user_id: int):
@@ -74,4 +86,5 @@ async def create_user_login(db: AsyncSession, user_login: schemas.UserLoginCreat
 # Verificar login
 async def get_user_login(db: AsyncSession, mail: str):
     result = await db.execute(select(models.UserLogin).filter(models.UserLogin.mail == mail))
-    return result.scalars().first()
+    user_login = result.scalars().first()
+    return user_login
